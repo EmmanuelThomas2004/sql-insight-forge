@@ -1,0 +1,48 @@
+-- 1. Find the top 5 customers by total sales
+SELECT 
+    Customer_ID,
+    SUM(Sales) AS Total_Sales
+FROM Orders
+GROUP BY Customer_ID
+ORDER BY Total_Sales DESC
+LIMIT 5;
+
+
+-- 2. Find products with an average profit greater than 100
+SELECT 
+    Product_ID,
+    AVG(Profit) AS Avg_Profit
+FROM Orders
+GROUP BY Product_ID
+HAVING AVG(Profit) > 100
+ORDER BY Avg_Profit DESC;
+
+
+-- 3. Calculate monthly sales
+SELECT 
+    YEAR(Order_Date) AS Order_Year,
+    MONTH(Order_Date) AS Order_Month,
+    SUM(Sales) AS Monthly_Sales
+FROM Orders
+GROUP BY YEAR(Order_Date), MONTH(Order_Date)
+ORDER BY Order_Year, Order_Month;
+
+
+-- 4. Find customers who placed more than 5 orders
+SELECT 
+    Customer_ID,
+    COUNT(DISTINCT Order_ID) AS Order_Count
+FROM Orders
+GROUP BY Customer_ID
+HAVING COUNT(DISTINCT Order_ID) > 5
+ORDER BY Order_Count DESC;
+
+
+-- 5. Rank products based on total sales
+SELECT 
+    Product_ID,
+    SUM(Sales) AS Total_Sales,
+    RANK() OVER (ORDER BY SUM(Sales) DESC) AS Sales_Rank
+FROM Orders
+GROUP BY Product_ID
+ORDER BY Sales_Rank;
